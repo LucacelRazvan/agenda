@@ -2,7 +2,7 @@
 import { DateTime } from 'luxon';
 import * as date from 'date.js';
 import * as debug from 'debug';
-import { parseExpression } from 'cron-parser';
+import { CronExpressionParser } from 'cron-parser';
 import humanInterval = require('human-interval');
 import { isValidDate } from './isValidDate';
 import type { IJobParameters } from '../types/JobParameters';
@@ -36,7 +36,7 @@ export const computeFromInterval = (attrs: IJobParameters<any>): Date => {
 	let error;
 	if (typeof attrs.repeatInterval === 'string') {
 		try {
-			let cronTime = parseExpression(attrs.repeatInterval, cronOptions);
+			let cronTime = CronExpressionParser.parse(attrs.repeatInterval, cronOptions);
 			let nextDate = cronTime.next().toDate();
 			if (
 				nextDate.valueOf() === lastRun.valueOf() ||
@@ -44,7 +44,7 @@ export const computeFromInterval = (attrs: IJobParameters<any>): Date => {
 			) {
 				// Handle cronTime giving back the same date for the next run time
 				cronOptions.currentDate = new Date(lastRun.valueOf() + 1000);
-				cronTime = parseExpression(attrs.repeatInterval, cronOptions);
+				cronTime = CronExpressionParser.parse(attrs.repeatInterval, cronOptions);
 				nextDate = cronTime.next().toDate();
 			}
 
