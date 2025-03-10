@@ -1,5 +1,5 @@
 {
-  "name": "agenda",
+  "name": "@tapptitude/agenda",
   "version": "5.0.0",
   "description": "Light weight job scheduler for Node.js",
   "main": "dist/index.js",
